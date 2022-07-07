@@ -11,7 +11,7 @@ const options = {
 	rootMargin: '200px',
 	threshold: 1.0,
 }
-let total_hits = 0;
+let total_hits = 10;
 //const { hits, totalHits } = getPixabayApi.fetchImages();
 let count = 1;
 const observer = new IntersectionObserver((entries) => {
@@ -88,11 +88,12 @@ async function onFormSubmit(e) {
 	getPixabayApi.searchQuery1 = request;
 	try {
 		const { hits, totalHits } = await getPixabayApi.fetchImages();
-		total_hits = totalHits;
+		
 		if (!totalHits) return Notify.failure("Sorry, there are no images matching your search query. Please try again.");
 		Notify.success(`Hooray! We found totalHits ${totalHits} images.`);
 		renderGallery(hits);
 		lightbox.refresh();
+		total_hits = totalHits;
 	} catch (error) {
 		console.log(error.message);
 	}
