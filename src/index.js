@@ -1,14 +1,11 @@
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";//.min
 import { Notify } from 'notiflix/build/notiflix-notify-aio';//
-//import './css/styles.css';
 const key = '28325573-e3f151920507aabfaddea723c';
 import { GetPixabayApi } from './js/getPixbay';
 Notify.init({
-	//position: "center-top",
 	timeout: 4000,
 	cssAnimationStyle: "from-top",
-	//showOnlyTheLastOne: true,
 });
 const options = {
 	rootMargin: '200px',
@@ -19,10 +16,9 @@ let total_hits = 0;
 let count = 1;
 const observer = new IntersectionObserver((entries) => {
 	entries.forEach(entriy => {//async
-		console.log(getPixabayApi.page * 40,'summ');
 		if (entriy.isIntersecting) {
-			if (getPixabayApi.page > 1 && total_hits <= (getPixabayApi.page * 40)) {
-				//console.log(getPixabayApi.page += getPixabayApi.page,'summ');
+			if (getPixabayApi.page > 1 && total_hits < (getPixabayApi.page * getPixabayApi.per_page)) {
+				console.log(getPixabayApi.page * getPixabayApi.per_page,'summ');
 					return Notify.warning("We're sorry, but you've reached the end of search results.")
 				} else {
 					if (getPixabayApi.page > 1) {
@@ -44,10 +40,10 @@ const searchInput = document.querySelector('[name="searchQuery"]');
 // const gallery = document.querySelector('.gallery');load-more
 const galleryRef = document.querySelector('.gallery');
 const formRef = document.querySelector('.search-form');
-const buttonMore = document.querySelector('.load-more');
+//const buttonMore = document.querySelector('.load-more');
 
 formRef.addEventListener('submit', onFormSubmit);
-buttonMore.addEventListener('click', onMorePic);
+//buttonMore.addEventListener('click', onMorePic);
 
 const getPixabayApi = new GetPixabayApi();
 getPixabayApi.fetchImages();//.then(console.log);
@@ -81,15 +77,6 @@ function makeGalleryMarkup(searchImages) {
 function renderGallery(searchImages) {
 	galleryRef.insertAdjacentHTML('beforeend', makeGalleryMarkup(searchImages));
 }
-async function total(e){ try {
-		const { hits, totalHits } = await getPixabayApi.fetchImages();
-		if (totalHits <= getPixabayApi.page * getPixabayApi.per_page) return Notify.warning("Sorry, there are no images matching your search query.totalHits ${totalHits} images. Please try again.");
-		Notify.success(`Hooray! We found totalHits ${totalHits} images.`);
-		
-	} catch (error) {
-		console.log(error.message);
-	}
-}
 
 async function onFormSubmit(e) {
 	e.preventDefault();
@@ -97,12 +84,12 @@ async function onFormSubmit(e) {
 	getPixabayApi.resetPage();
 	const request = e.target.elements.searchQuery.value.trim();
 	//console.log(request);
-	if (!request) return Notify.info('tra la la');
+	if (!request) return Notify.failure(`tra la la images. (хотя бы одну букву введи!)`);
 	getPixabayApi.searchQuery1 = request;
 	try {
 		const { hits, totalHits } = await getPixabayApi.fetchImages();
 		total_hits = totalHits;
-		if (!totalHits) return Notify.warning("Sorry, there are no images matching your search query. Please try again.");
+		if (!totalHits) return Notify.failure("Sorry, there are no images matching your search query. Please try again.");
 		Notify.success(`Hooray! We found totalHits ${totalHits} images.`);
 		renderGallery(hits);
 		lightbox.refresh();
