@@ -1,6 +1,7 @@
 import SimpleLightbox from "simplelightbox";
-import "simplelightbox/dist/simple-lightbox.css";//.min
+import "simplelightbox/dist/simple-lightbox.min.css";//.min
 import { Notify } from 'notiflix/build/notiflix-notify-aio';//
+import './css/styles.css';
 const key = '28325573-e3f151920507aabfaddea723c';
 import { GetPixabayApi } from './js/getPixbay';
 Notify.init({
