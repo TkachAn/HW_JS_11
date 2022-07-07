@@ -8,7 +8,7 @@ Notify.init({
 	//position: "center-top",
 	timeout: 4000,
 	cssAnimationStyle: "from-top",
-	showOnlyTheLastOne: true,
+	//showOnlyTheLastOne: true,
 });
 const options = {
 	rootMargin: '200px',

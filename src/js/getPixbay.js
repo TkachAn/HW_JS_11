@@ -20,11 +20,9 @@ export class GetPixabayApi{
 			q: this.searchQuery,
 			image_type: 'photo',
 			orientation: 'horizontal',
-			safesearch: false,//true,
+			safesearch: true,//false,//
 			per_page: this.per_page,
 			page: this.page,
-			//widthRatio: 1.9,
-			//heightRatio: 1.9,
 			scaleImageToRatio: true,
 			doubleTapZoom: 4,
 			overlay: false,
