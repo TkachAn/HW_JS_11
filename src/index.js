@@ -1,7 +1,7 @@
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";//.min
 import { Notify } from 'notiflix/build/notiflix-notify-aio';//
-const key = '28325573-e3f151920507aabfaddea723c';
+//const key = '28325573-e3f151920507aabfaddea723c';
 import { GetPixabayApi } from './js/getPixbay';
 Notify.init({
 	timeout: 4000,
@@ -18,7 +18,8 @@ const observer = new IntersectionObserver((entries) => {
 	entries.forEach(entriy => {//async
 		if (entriy.isIntersecting) {
 			if (getPixabayApi.page > 1 && total_hits < (getPixabayApi.page * getPixabayApi.per_page)) {
-				console.log(getPixabayApi.page * getPixabayApi.per_page,'summ');
+				console.log(getPixabayApi.page * getPixabayApi.per_page, 'summ');
+				
 					return Notify.warning("We're sorry, but you've reached the end of search results.")
 				} else {
 					if (getPixabayApi.page > 1) {
@@ -89,7 +90,10 @@ async function onFormSubmit(e) {
 	try {
 		const { hits, totalHits } = await getPixabayApi.fetchImages();
 		
-		if (!totalHits) return Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+		if (!totalHits) {
+			e.target.reset();//renderGallery(hits);//clear();//getPixabayApi.resetPage();//
+			return Notify.failure("Sorry, there are no images matching your search query. Please try again.")
+		};
 		Notify.success(`Hooray! We found totalHits ${totalHits} images.`);
 		renderGallery(hits);
 		lightbox.refresh();
